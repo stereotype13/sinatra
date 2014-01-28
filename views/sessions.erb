@@ -1,0 +1,9 @@
+<p>Session id is <%=@session_id%></p>
+
+<table>
+	<%@sessions.each do |session|%>
+	<tr>
+		<td><%=session.id%></td><td><%=session.user%></td>
+	</tr>
+	<%end%>
+</table>
