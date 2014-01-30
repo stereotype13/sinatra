@@ -1,0 +1,7 @@
+<table>
+  <%@webapps.each do |webapp|%>
+  <tr>
+    <td><%=webapp.id%></td><td><%=webapp.domain%></td><td><%=webapp.user.username%></td><td><%=webapp.webapp_key%></td>
+  </tr>
+  <%end%>
+</table>

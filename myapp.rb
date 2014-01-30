@@ -3,6 +3,7 @@ Bundler.require
 require './models'
 
 class MyApp < Sinatra::Base
+	set :bind, '0.0.0.0'
 	register Sinatra::Flash
 
 	helpers do
@@ -10,17 +11,17 @@ class MyApp < Sinatra::Base
 		def authorize(username, password)
 		  user = User.first(username)
 		  if !user.nil? && user.authenticate(password)
-			#user is authenticated, so let's create a session
-			session = Session.new
-			session.user = user
-			session.save
-			
-			#set the session cookie
-			response.set_cookie "session_token", {value: session.id, path: '/'}
-			
-			true
+				#user is authenticated, so let's create a session
+				session = Session.new
+				session.user = user
+				session.save
+				
+				#set the session cookie
+				response.set_cookie "session_token", {value: session.id, path: '/'}
+				
+				true
 		  else
-			false
+				false
 		  end
 		  
 		end
@@ -30,7 +31,7 @@ class MyApp < Sinatra::Base
 		  if !session.nil?
 			session.user
 		  else
-			nil
+				nil
 		  end
 		end
 	end
@@ -74,6 +75,31 @@ class MyApp < Sinatra::Base
 	
 	get '/error' do
 	  erb :error
+	end
+
+	get '/webapps' do
+		@webapps = Webapp.all
+		erb :webapps
+	end
+
+	get '/event' do
+		erb :event
+	end
+
+	get '/events' do
+		@events = Event.all
+		erb :events
+		#count = @events.count
+		#{}"There are #{count} events."
+	end
+
+	post '/event/data' do
+		puts "I AM HERE!!!"
+		p params
+		@webapp = Webapp.first
+		@event = Event.new
+		@event.event = params[:event]
+		@event.save
 	end
 	
 	post '/login/auth' do
